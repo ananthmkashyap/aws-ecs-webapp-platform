@@ -26,7 +26,15 @@
           "name": "",
           "valueFrom": ""
         }
-      ]
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/ecs-webapp-frontend",
+          "awslogs-region": "eu-central-1",
+          "awslogs-stream-prefix": "frontend"
+        }
+      }
     }
   ]
 }
