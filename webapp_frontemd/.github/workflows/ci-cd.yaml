@@ -1,0 +1,54 @@
+name: dockerize and deploy frontend webapp on ECS
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+
+jobs:
+  docker_build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::12353464364:role/GhaOIDCRole
+          aws-region: eu-central-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: build and push docker image to ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ecs-webapp-frontend
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+  deploy_to_ecs:
+    needs: docker_build_and_push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::12353464364:role/GhaOIDCRole
+          aws-region: eu-central-1  
+      
+      - name: Trigger CodeDeploy deployment
+        run: |
+          aws ecs deploy \
+          --service ecs-webapp-frontend-service \
+          --task-definition file://task_definition.json \
+          --codedeploy-appspec file://appspec.yaml \
+          --cluster ecs_webapp \
+          --codedeploy-application ecs-webapp-codedeploy-app \
+          --codedeploy-deployment-group ecs-webapp-codedeploy-frontend-group
+

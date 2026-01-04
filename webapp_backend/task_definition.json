@@ -1,0 +1,32 @@
+{
+  "family": "backend",
+  "executionRoleArn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
+  "networkMode": "none",
+  "containerDefinitions": [
+    {
+      "name": "ecs-webapp-backend",
+      "image": "uri_of_image_in_ecr",
+      "cpu": 1024,
+      "memory": 2048,
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "hostPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "",
+          "value": ""
+        }
+      ],
+      "secrets": [
+        {
+          "name": "",
+          "valueFrom": ""
+        }
+      ]
+    }
+  ]
+}
