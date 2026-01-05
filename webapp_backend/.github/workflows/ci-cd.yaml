@@ -41,11 +41,19 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::12353464364:role/GhaOIDCRole
           aws-region: eu-central-1  
-      
+
+      - name:  Render Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task_definition.json
+          container-name: ecs-webapp-backend
+          image: ecr_registry/ecs-webapp-backend:${{ github.ref_name }}
+
       - name: Deploy to Amazon ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
-            task-definition: task-definition.json
+            task-definition: ${{ steps.task-def.outputs.task-definition }}
             service: ecs-webapp-backend-service
             cluster: ecs_webapp 
             wait-for-service-stability: true

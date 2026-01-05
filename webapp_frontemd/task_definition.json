@@ -1,5 +1,6 @@
 {
   "family": "frontend",
+  "taskRoleArn": "arn:aws:iam::123456789012:role/ecsTaskRole",
   "executionRoleArn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
   "networkMode": "none",
   "containerDefinitions": [

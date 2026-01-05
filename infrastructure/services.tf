@@ -29,7 +29,7 @@ resource "aws_ecs_service" "frontend_service" {
     }  
 
     network_configuration {
-      security_groups = aws_security_group.allow_https.id
+      security_groups = [aws_security_group.allow_https.id]
       subnets = module.vpc.private_subnets
     }
 
@@ -57,7 +57,7 @@ resource "aws_ecs_service" "backend_service" {
     } 
 
     network_configuration {
-      security_groups = aws_security_group.allow_https.id
+      security_groups = [aws_security_group.allow_https.id]
       subnets = module.vpc.private_subnets
     }
 
@@ -76,8 +76,8 @@ resource "aws_ecs_service" "backend_service" {
     }
 }
 
-resource "aws_iam_role" "ecs_service_role" {
-  name = "${local.name}-ecs-service-role"
+resource "aws_iam_role" "codedeploy_service_role" {
+  name = "${local.name}-codedeploy-service-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -85,10 +85,7 @@ resource "aws_iam_role" "ecs_service_role" {
         Action = "sts:AssumeRole"
         Effect = "Allow"
         Principal = {
-          Service = [
-            "ecs-tasks.amazonaws.com",
-            "ecs.amazonaws.com",
-          ]
+        Service = "codedeploy.amazonaws.com"
         }
       }
     ]
@@ -96,12 +93,7 @@ resource "aws_iam_role" "ecs_service_role" {
 }
 
 
-resource "aws_iam_role_policy_attachment" "ecs_service_role" {
-  role       = aws_iam_role.ecs_service_role
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
-}
-
-resource "aws_iam_role_policy_attachment" "ecs_alb_management_role" {
-  role       = aws_iam_role.ecs_service_role
-  policy_arn = "arn:aws:iam::aws:policy/AmazonECSInfrastructureRolePolicyForLoadBalancers"
+resource "aws_iam_role_policy_attachment" "codedeploy_service_role" {
+  role       = aws_iam_role.codedeploy_service_role
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRoleForECS"
 }
