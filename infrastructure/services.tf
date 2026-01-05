@@ -3,7 +3,6 @@ resource "aws_ecs_service" "frontend_service" {
     cluster = aws_ecs_cluster.ecs_webapp.id
     task_definition = "frontend:1"
     desired_count = 3
-    iam_role = aws_iam_role.ecs_service_role.arn
 
     lifecycle {
       ignore_changes = [task_definition]
@@ -44,7 +43,6 @@ resource "aws_ecs_service" "backend_service" {
     cluster = aws_ecs_cluster.ecs_webapp.id
     task_definition = "backend:1"
     desired_count = 3
-    iam_role = aws_iam_role.ecs_service_role.arn
 
     lifecycle {
       ignore_changes = [task_definition]

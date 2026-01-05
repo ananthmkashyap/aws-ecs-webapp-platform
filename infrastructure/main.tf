@@ -28,7 +28,6 @@ resource "aws_ecs_capacity_provider" "ecs_managed_capacity_provider" {
 
       network_configuration {
         subnets         = module.vpc.private_subnets
-        security_groups = [aws_security_group.example.id]
       }
 
       storage_configuration {
@@ -96,5 +95,14 @@ resource "aws_ecr_repository" "backend" {
   image_scanning_configuration {
     scan_on_push = true
   }
+}
+
+resource "aws_ssm_parameter" "secrets" {
+  for_each = local.secrets
+
+  name      = each.key
+  type      = "SecureString"
+  value     = each.value
+  overwrite = true
 }
 

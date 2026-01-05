@@ -16,7 +16,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::12353464364:role/GhaOIDCRole
+          role-to-assume: arn:aws:iam::12353464364:role/gha-deploy-role
           aws-region: eu-central-1
 
       - name: Login to Amazon ECR
@@ -39,7 +39,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::12353464364:role/GhaOIDCRole
+          role-to-assume: arn:aws:iam::12353464364:role/gha-deploy-role
           aws-region: eu-central-1  
       
       - name: Trigger CodeDeploy deployment
