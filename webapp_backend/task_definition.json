@@ -18,14 +18,18 @@
       ],
       "environment": [
         {
-          "name": "",
-          "value": ""
+          "name": "DB_HOST",
+          "value": "aws_db_instance.ecs_webapp_db.address"
+        },
+        {
+          "name": "DB_NAME",
+          "value": "aws_db_instance.ecs_webapp_db.db_name"
         }
       ],
       "secrets": [
         {
-          "name": "",
-          "valueFrom": ""
+          "name": "DB_PASSWORD",
+          "valueFrom": "arn_secret_manger_db_password"
         }
       ],
       "logConfiguration": {

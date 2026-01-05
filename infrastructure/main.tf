@@ -104,3 +104,14 @@ resource "aws_ssm_parameter" "secrets" {
   overwrite = true
 }
 
+resource "aws_db_instance" "ecs_webapp_db" {
+  allocated_storage           = 16
+  max_allocated_storage       = 100 
+  db_name                     = "ecs_webapp_db"
+  engine                      = "mysql"
+  engine_version              = "8.0"
+  instance_class              = "db.t3.xlarge"
+  manage_master_user_password = true
+  username                    = "ecs_webapp_admin"
+  multi_az                    = true
+}

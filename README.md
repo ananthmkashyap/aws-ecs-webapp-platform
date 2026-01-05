@@ -1,5 +1,9 @@
 # aws-ecs-webapp-platform
 
+### Architecture Diagram
+
+![ECS WebApp Architecture](./ecs_architecture.png)
+
 ### IAM Roles
 1. ecs_infra_role 
 ->  It is passed to the managed_instances_provider so the ECS service can scale your infrastructure (ASG) up and down.
