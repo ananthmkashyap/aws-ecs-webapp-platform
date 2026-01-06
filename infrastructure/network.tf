@@ -46,6 +46,8 @@ module "alb" {
     https = {
       port     = 443
       protocol = "HTTPS"
+      certificate_arn = aws_acm_certificate.cert.arn
+      
 
       forward = {
         target_group_key = "ecs_webapp"
@@ -63,14 +65,12 @@ module "alb" {
 
       health_check = {
         enabled             = true
-        healthy_threshold   = 5
         interval            = 30
         matcher             = "200"
         path                = "/"
         port                = "traffic-port"
         protocol            = "HTTPS"
         timeout             = 5
-        unhealthy_threshold = 2
       }
 
       create_attachment = false
@@ -84,17 +84,24 @@ module "alb" {
 
       health_check = {
         enabled             = true
-        healthy_threshold   = 5
         interval            = 30
         matcher             = "200"
         path                = "/"
         port                = "traffic-port"
         protocol            = "HTTPS"
         timeout             = 5
-        unhealthy_threshold = 2
       }
 
       create_attachment = false
     }
+  }
+}
+
+resource "aws_acm_certificate" "cert" {
+  domain_name       = "allocnow.com"
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
   }
 }

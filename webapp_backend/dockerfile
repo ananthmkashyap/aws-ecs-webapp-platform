@@ -4,8 +4,8 @@ WORKDIR /app
 
 RUN pip install flask
 
-COPY backend_server1.py .
+COPY . .
 
 EXPOSE 5000
 
-CMD ["python", "backend_server1.py"]
+CMD ["python", "webapp.py"]
